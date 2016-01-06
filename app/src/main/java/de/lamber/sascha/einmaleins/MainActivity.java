@@ -1,8 +1,11 @@
 package de.lamber.sascha.einmaleins;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -100,14 +103,56 @@ public class MainActivity extends AppCompatActivity {
         int position = Integer.parseInt(view.getTag().toString());
 
         if (position == correctResultAt){
+            resultImage.setImageResource(R.mipmap.positive);
+
             Toast toast = Toast.makeText(this, "Richtig!", Toast.LENGTH_SHORT);
             toast.show();
         }else {
+            resultImage.setImageResource(R.mipmap.negative);
+
             Toast toast = Toast.makeText(this, String.format("Falsch: %s%d", challengeText.getText(), correctResult), Toast.LENGTH_SHORT);
             toast.show();
         }
 
-        nextChallenge();
+        resultImage.setVisibility(View.VISIBLE);
+
+        // call the method after a setting delay
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                resultImage.setVisibility(View.INVISIBLE);
+                nextChallenge();
+            }
+        }, 2000);
+
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.einmaleins_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch (item.getItemId()){
+            case R.id.menu_item_neustart:
+                Log.d("EinMalEins", "Reihe beendet");
+                finish();
+                return true;
+            case R.id.menu_item_settings:
+                Toast toast = Toast.makeText(this, "Einstellungen...", Toast.LENGTH_SHORT);
+                toast.show();
+                Log.d("EinMalEins", "Einstellungen gewählt");
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 }

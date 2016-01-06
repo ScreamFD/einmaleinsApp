@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EinMalEins</string>
+    <string name="neustart">Neu beginnen</string>
+    <string name="settings">Einstellungen</string>
 </resources>
